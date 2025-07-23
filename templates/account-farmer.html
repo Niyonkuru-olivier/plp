@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgb(18, 46, 43);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding-top: 50px;
+}
+
+header {margin-top: 80%;
+    background-color: rgb(45, 157, 146);
+    width: 100%;
+    padding: 20px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    margin-right: 20px;
+}
+
+@media screen and (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .logo {
+        margin-bottom: 10px;
+    }
+
+    .header-content h1 {
+        font-size: 32px;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    margin-top: 150px; /* Adjusted margin for the form */
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: rgb(18, 46, 43);
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.success {
+    color: green;
+    text-align: center;
+    margin-top: 10px;
+}
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <img src="ikiraro.png" alt="Ikiraro logo" class="logo">
+            <h1 style="color:#4CAF50">IKIRARO</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Create Account</h2>
+        <form id="createAccountForm">
+            <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
+            <input type="text" id="secondName" name="secondName" placeholder="Second Name" required>
+            <input type="tel" id="telephone" name="telephone" pattern="[0-9]{10}" placeholder="Enter 10-digit phone number" required>
+            <select id="continent" name="continent" required>
+                <option value="">Select Continent</option>
+                <option value="Africa">Africa</option>
+                <option value="Asia">Asia</option>
+                <option value="Europe">Europe</option>
+                <option value="North America">North America</option>
+                <option value="South America">South America</option>
+                <option value="Australia">Australia</option>
+                <option value="Antarctica">Antarctica</option>
+            </select>
+            <input type="text" id="country" name="country" placeholder="Country" required>
+            <input type="text" id="city" name="city" placeholder="City" required>
+            <input type="text" id="idCard" name="idCard" pattern="[0-9]{16}" placeholder="Enter 16-digit ID or Passport" required>
+            <input type="email" id="email" name="email" placeholder="Email Address" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <input type="password" id="confirmpassword" name="confirmpassword" placeholder="Confirm Password" required>
+            <button type="submit">Create Account</button>
+            <p class="error" id="errorMessage"></p>
+            <p class="success" id="successMessage"></p>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('createAccountForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission for validation
+
+            // Clear previous messages
+            errorMessage.textContent = '';
+            successMessage.textContent = '';
+
+            // Get form values
+            const firstName = document.getElementById('firstName').value;
+            const secondName = document.getElementById('secondName').value;
+            const telephone = document.getElementById('telephone').value;
+            const continent = document.getElementById('continent').value;
+            const country = document.getElementById('country').value;
+            const city = document.getElementById('city').value;
+            const idCard = document.getElementById('idCard').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmpassword').value;
+
+            // Validate National ID/Passport (16 digits)
+            const idPattern = /^[0-9]{16}$/;
+            if (!idPattern.test(idCard)) {
+                errorMessage.textContent = "National ID/Passport must be 16 digits.";
+                return;
+            }
+
+            // Validate email structure
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                errorMessage.textContent = "Please enter a valid email address.";
+                return;
+            }
+
+            // Validate phone number (10 digits)
+            const phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(telephone)) {
+                errorMessage.textContent = "Please enter a valid 10-digit phone number.";
+                return;
+            }
+
+            // Validate password and confirm password match
+            if (password !== confirmPassword) {
+                errorMessage.textContent = "Passwords do not match.";
+                return;
+            }
+
+            // If all validations pass, show success and proceed
+            successMessage.textContent = "Account created successfully!";
+            successMessage.classList.add('success');
+
+            // Simulate a success and reset the form after 2 seconds
+            setTimeout(() => {
+                form.reset();
+                successMessage.textContent = "Redirecting...";
+                setTimeout(() => {
+                    window.location.href = "appreciate-farmer.html";
+                }, 2000);
+            }, 2000);
+        });
+    </script>
+
+</body>
+</html>
